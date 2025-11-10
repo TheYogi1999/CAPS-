@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Text → Sprachdatenbank-Codes</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="container header-inner">
+      <div>
+        <h1>Text → Sprachdatenbank-Codes</h1>
+        <p class="subtitle">XLSX laden, Sprache wählen, Texte automatisch per &#ID; ersetzen.</p>
+      </div>
+      <div class="badge" id="dbBadge" title="Status der lokalen Datenbank">Nicht gespeichert</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Toolbar -->
+    <section class="panel toolbar">
+      <div class="left">
+        <label class="file-label">
+          <input id="xlsxFile" type="file" accept=".xlsx" />
+          <span class="btn primary">XLSX laden</span>
+        </label>
+        <div id="dropZone" class="dropzone" title="Datei hierher ziehen">oder hier ablegen</div>
+      </div>
+
+      <div class="right">
+        <div class="select-wrap">
+          <label for="languageSelect">Sprache</label>
+          <select id="languageSelect" disabled>
+            <option value="">— keine Daten —</option>
+          </select>
+        </div>
+
+        <label class="switch">
+          <input id="caseSensitiveToggle" type="checkbox" />
+          <span>Groß-/Kleinschreibung beachten</span>
+        </label>
+
+        <button id="clearDbBtn" class="btn ghost" title="Lokale Daten löschen">Lokale Daten löschen</button>
+      </div>
+    </section>
+
+    <div id="statusBar" class="statusbar">
+      <span id="statusMsg">Bereit.</span>
+    </div>
+
+    <!-- Workspace -->
+    <section class="grid3">
+      <div class="card">
+        <div class="card-head">
+          <h2>Eingabetext</h2>
+          <div class="card-actions">
+            <button id="clearTextBtn" class="btn tiny ghost">Text leeren</button>
+          </div>
+        </div>
+        <textarea id="inputText" placeholder="Hier Text einfügen …"></textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Alles GROSS</h2>
+          <button data-copy="upperOut" class="btn tiny">Kopieren</button>
+        </div>
+        <pre id="upperOut" class="output"></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Mit Codes (&#Nummer;)</h2>
+          <button data-copy="codedOut" class="btn tiny">Kopieren</button>
+        </div>
+        <pre id="codedOut" class="output"></pre>
+      </div>
+    </section>
+
+    <!-- Collapsible Preview -->
+    <section class="panel">
+      <details id="previewDetails" class="preview-details">
+        <summary>
+          <span class="summary-title">Vorschau (erste 12 Zeilen)</span>
+          <span class="pill" id="rowCountPill">0 Zeilen</span>
+        </summary>
+        <div id="previewTable" class="table"></div>
+      </details>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <footer class="app-footer">
+    <div class="container">
+      <small>Mehrwort-Phrasen werden zuerst ersetzt. Daten werden nach Upload automatisch lokal gespeichert.</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
